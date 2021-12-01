@@ -22,5 +22,6 @@ cargo build --verbose $TGT $1
 cd ..
 
 cp target/$TARGET/$VERSION/youki .
+cp target/$TARGET/$VERSION/ociplex .
 cp target/$TARGET/$VERSION/integration_test ./youki_integration_test
 cp runtimetest/target/$TARGET/$VERSION/runtimetest ./runtimetest_tool
