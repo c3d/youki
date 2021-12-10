@@ -1,0 +1,5 @@
+#! @BASEPATH@/ociplex --backend
+
+backend-type = "Cli"
+path = "/bin/crun"
+
