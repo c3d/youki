@@ -25,3 +25,11 @@ cp target/$TARGET/$VERSION/youki .
 cp target/$TARGET/$VERSION/ociplex .
 cp target/$TARGET/$VERSION/integration_test ./youki_integration_test
 cp runtimetest/target/$TARGET/$VERSION/runtimetest ./runtimetest_tool
+
+BASEPATH=$(pwd)
+
+for t in crates/ociplex/examples/*.toml; do
+    OUT=$(basename $t .toml).ociplex
+    sed "s!@BASEPATH@!$BASEPATH!" < $t > $OUT
+    chmod +x $OUT
+done

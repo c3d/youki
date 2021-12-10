@@ -1,1 +1,3 @@
+#! @BASEPATH@/ociplex --backend
+
 backend-type = "Trivial"
