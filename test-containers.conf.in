@@ -1,0 +1,13 @@
+# Sample containers.conf file to run run the podman system tests
+# against youki or ociplex
+
+[engine]
+
+#runtime = "crun"
+#runtime = "youki"
+runtime = "ociplex-crun"
+
+[engine.runtimes]
+
+youki = ["@BASEPATH@/youki"]
+ociplex-crun = ["@BASEPATH@/cli-crun.ociplex"]
