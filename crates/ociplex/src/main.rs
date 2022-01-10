@@ -22,7 +22,10 @@ struct Opts {
 }
 
 fn main() -> Result<()> {
-    let opts = Opts::try_parse()?;
+    let opts = match Opts::try_parse() {
+        Ok(opts) => opts,
+        Err(e) => e.exit(),
+    };
 
     let config = fs::read_to_string(&opts.backend).context("Reading backend config")?;
     let config: backend::Config = toml::from_str(&config).context("Parsing backend config")?;
