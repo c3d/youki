@@ -23,3 +23,5 @@ runtimetest
 .vscode
 
 *~
+
+test-containers.conf

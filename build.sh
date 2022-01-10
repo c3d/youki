@@ -33,3 +33,5 @@ for t in crates/ociplex/examples/*.toml; do
     sed "s!@BASEPATH@!$BASEPATH!" < $t > $OUT
     chmod +x $OUT
 done
+
+sed "s!@BASEPATH@!$BASEPATH!" < test-containers.conf.in > test-containers.conf
