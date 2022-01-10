@@ -21,3 +21,5 @@ tags.temp
 
 /bundle.tar.gz
 /test.log
+
+test-containers.conf
