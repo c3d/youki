@@ -62,7 +62,6 @@ impl CliBackend {
             .args(args)
             .status()?;
 
-        dbg!(status);
         if status.success() {
             return Ok(())
         }
@@ -109,7 +108,7 @@ impl Backend for CliBackend {
 
         backargs.push("start".into());
         backargs.push(args.container_id.into());
-        dbg!(&backargs);
+
         self.invoke(backargs)
     }
 
