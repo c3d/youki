@@ -6,8 +6,10 @@
 #runtime = "crun"
 #runtime = "youki"
 runtime = "ociplex-crun"
+#runtime = "ociplex-trivial"
 
 [engine.runtimes]
 
 youki = ["@BASEPATH@/youki"]
 ociplex-crun = ["@BASEPATH@/cli-crun.ociplex"]
+ociplex-trivial = ["@BASEPATH@/trivial.ociplex"]
