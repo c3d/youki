@@ -9,6 +9,12 @@ use liboci_cli::{GlobalOpts, StandardCmd};
 mod backend;
 
 #[derive(Parser, Debug)]
+enum Subcommand {
+    #[clap(flatten)]
+    Standard(StandardCmd),
+}
+
+#[derive(Parser, Debug)]
 #[clap(version = crate_version!())]
 struct Opts {
     #[clap(long)]
@@ -18,7 +24,7 @@ struct Opts {
     global: GlobalOpts,
 
     #[clap(subcommand)]
-    subcmd: StandardCmd,
+    subcmd: Subcommand,
 }
 
 fn main() -> Result<()> {
@@ -31,7 +37,9 @@ fn main() -> Result<()> {
     let config: backend::Config = toml::from_str(&config).context("Parsing backend config")?;
 
     let backend = config.instantiate(opts.global);
-    backend.standard_command(opts.subcmd)?;
+    match opts.subcmd {
+        Subcommand::Standard(std) => backend.standard_command(std)?,
+    }
 
     Ok(())
 }
