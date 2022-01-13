@@ -12,6 +12,8 @@ mod backend;
 enum Subcommand {
     #[clap(flatten)]
     Standard(StandardCmd),
+
+    Exec(liboci_cli::Exec),
 }
 
 #[derive(Parser, Debug)]
@@ -39,6 +41,7 @@ fn main() -> Result<()> {
     let backend = config.instantiate(opts.global);
     match opts.subcmd {
         Subcommand::Standard(std) => backend.standard_command(std)?,
+        Subcommand::Exec(exec) => backend.exec(exec)?,
     }
 
     Ok(())
