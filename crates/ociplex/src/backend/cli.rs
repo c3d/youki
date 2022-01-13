@@ -145,4 +145,53 @@ impl Backend for CliBackend {
 
         self.invoke(backargs)
     }
+
+    fn exec(&self, args: liboci_cli::Exec) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("exec".into());
+        if let Some(consock) = args.console_socket {
+            backargs.push("--console-socket".into());
+            backargs.push(consock.into());
+        }
+
+        if args.tty {
+            backargs.push("--tty".into());
+        }
+
+        if let Some(cwd) = args.cwd {
+            backargs.push("--cwd".into());
+            backargs.push(cwd.into());
+        }
+
+        if let Some(pidfile) = args.pid_file {
+            backargs.push("--pid-file".into());
+            backargs.push(pidfile.into());
+        }
+
+        for (key, val) in args.env {
+            backargs.push("--env".into());
+            backargs.push(format!("{}={}", key, val).into());
+        }
+
+        if args.no_new_privs {
+            backargs.push("--no-new-privs".into());
+        }
+
+        if let Some(process) = args.process {
+            backargs.push("--process".into());
+            backargs.push(process.into());
+        }
+
+        if args.detach {
+            backargs.push("--detach".into());
+        }
+
+        backargs.push(args.container_id.into());
+        for a in args.command {
+            backargs.push(a.into());
+        }
+
+        self.invoke(backargs)
+    }
 }

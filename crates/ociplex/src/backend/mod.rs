@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 
 use liboci_cli::{GlobalOpts, StandardCmd};
 
@@ -29,6 +29,10 @@ pub trait Backend: Debug {
     fn kill(&self, args: liboci_cli::Kill) -> Result<()>;
     fn delete(&self, args: liboci_cli::Delete) -> Result<()>;
     fn state(&self, args: liboci_cli::State) -> Result<()>;
+
+    fn exec(&self, args: liboci_cli::Exec) -> Result<()> {
+        Err(anyhow!("exec subcommand unimplemented: {:?}", args))
+    }
 
     fn standard_command(&self, cmd: liboci_cli::StandardCmd) -> Result<()> {
         match cmd {
