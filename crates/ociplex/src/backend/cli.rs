@@ -101,6 +101,10 @@ impl Backend for CliBackend {
         backargs.push("--preserve-fds".into());
         backargs.push(format!("{}", args.preserve_fds).into());
 
+        if args.no_new_keyring {
+            backargs.push("--no-new-keyring".into());
+        }
+
         backargs.push(args.container_id.into());
 
         self.invoke(backargs)

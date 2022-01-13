@@ -18,6 +18,11 @@ pub struct Create {
     /// Pass N additional file descriptors to the container (stdio + $LISTEN_FDS + N in total)
     #[clap(long, default_value = "0")]
     pub preserve_fds: i32,
+
+    // XXX: non-standard extension
+    #[clap(long)]
+    pub no_new_keyring: bool,
+
     /// name of the container instance to be started
     #[clap(value_parser = clap::builder::NonEmptyStringValueParser::new(), required = true)]
     pub container_id: String,
