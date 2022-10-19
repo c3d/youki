@@ -51,19 +51,19 @@ OUTPUT=${output:-$ROOT/bin}
 if [ "$CRATE" == "youki" ]; then
     rm -f ${OUTPUT}/youki
     cargo build --target ${TARGET} ${OPTION} ${FEATURES} --bin youki
-    mv ${ROOT}/target/${TARGET}/${VERSION}/youki ${OUTPUT}/
+    mv ${ROOT}/target/${TARGET}/${VERSION}/youki ${OUTPUT}/ || true
 fi
 
 if [ "$CRATE" == "integration-test" ]; then
     rm -f ${OUTPUT}/integration_test
     cargo build --target ${TARGET} ${OPTION} ${FEATURES} --bin integration_test
-    mv ${ROOT}/target/${TARGET}/${VERSION}/integration_test ${OUTPUT}/
+    mv ${ROOT}/target/${TARGET}/${VERSION}/integration_test ${OUTPUT}/ || true
 fi
 
 if [ "$CRATE" == "runtimetest" ]; then
     rm -f ${OUTPUT}/runtimetest
     CARGO_TARGET_DIR=${RUNTIMETEST_TARGET} RUSTFLAGS="-Ctarget-feature=+crt-static" cargo build --target ${TARGET} ${OPTION} ${FEATURES} --bin runtimetest
-    mv ${RUNTIMETEST_TARGET}/${TARGET}/${VERSION}/runtimetest ${OUTPUT}/
+    mv ${RUNTIMETEST_TARGET}/${TARGET}/${VERSION}/runtimetest ${OUTPUT}/ || true
 fi
 
 exit 0
