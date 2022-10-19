@@ -2006,6 +2006,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "ociplex"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "liboci-cli",
+ "serde",
+ "toml",
+]
+
+[[package]]
 name = "oci-spec"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
