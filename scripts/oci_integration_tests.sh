@@ -1,7 +1,7 @@
 #!/bin/bash -eu
 
 ROOT=$(git rev-parse --show-toplevel)
-if [ -z "$RUNTIME" ]; then
+if [ ! -v RUNTIME ]; then
     RUNTIME=${1:-.}/youki
 fi
 OCI_TEST_DIR=${ROOT}/tests/oci-runtime-tests/src/github.com/opencontainers/runtime-tools
