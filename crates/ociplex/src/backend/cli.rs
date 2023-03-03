@@ -145,6 +145,7 @@ impl Backend for CliBackend {
     }
 
     fn delete(&self, args: liboci_cli::Delete) -> Result<()> {
+        // See https://github.com/opencontainers/runc/blob/main/man/runc-delete.8.md
         let mut backargs = Vec::<OsString>::new();
 
         backargs.push("delete".into());
