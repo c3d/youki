@@ -229,10 +229,21 @@ impl Backend for CliBackend {
 
         self.invoke(backargs)
     }
+
     fn events(&self, args: liboci_cli::Events) -> Result<()> {
+        // See https://github.com/opencontainers/runc/blob/main/man/runc-events.8.md
         let mut backargs = Vec::<OsString>::new();
 
         backargs.push("events".into());
+
+        if args.interval != 5 {
+            backargs.push("--interval".into());
+            backargs.push(args.interval.to_string().into());
+        }
+        if args.stats {
+            backargs.push("--stats".into())
+        }
+        backargs.push(args.container_id.into());
 
         self.invoke(backargs)
     }
