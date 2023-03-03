@@ -169,6 +169,7 @@ impl Backend for CliBackend {
 
     // Common non-standard commands (from liboci_cli::CommonCmd)
     fn checkpoint(&self, args: liboci_cli::Checkpoint) -> Result<()> {
+        // See https://github.com/opencontainers/runc/blob/main/man/runc-checkpoint.8.md
         let mut backargs = Vec::<OsString>::new();
 
         backargs.push("checkpoint".into());
