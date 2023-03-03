@@ -1,5 +1,7 @@
 [package]
 name = "ociplex"
+description = "An OCI-compatible runtime multiplexing to various backends"
+readme = "README.md"
 version = "0.1.0"
 edition = "2021"
 
