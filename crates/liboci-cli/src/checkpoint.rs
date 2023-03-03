@@ -2,6 +2,7 @@ use clap::Parser;
 use std::path::PathBuf;
 
 /// Checkpoint a running container
+/// Reference: https://github.com/opencontainers/runc/blob/main/man/runc-checkpoint.8.md
 #[derive(Parser, Debug)]
 pub struct Checkpoint {
     #[clap(value_parser = clap::builder::NonEmptyStringValueParser::new(), required = true)]
@@ -27,4 +28,28 @@ pub struct Checkpoint {
     /// Path for saving work files and logs
     #[clap(long)]
     pub work_path: Option<PathBuf>,
+    /// Path for previous criu image file in pre-dump
+    #[clap(long)]
+    pub parent_path: Option<PathBuf>,
+    /// Use lazy migration mechanism
+    #[clap(long)]
+    pub lazy_pages: bool,
+    /// Pass a file descriptor fd to criu
+    #[clap(long)]
+    pub status_fd: Option<u32>, // TODO: Is u32 the right type?
+    /// Start a page server at the given URL
+    #[clap(long)]
+    pub page_server: Option<String>,
+    /// Do a pre-dump
+    #[clap(long)]
+    pub pre_dump: bool,
+    /// Cgroups mode
+    #[clap(long)]
+    pub manage_cgroups_mode: Option<String>,
+    /// Checkpoint a namespace, but don't save its properties
+    #[clap(long)]
+    pub empty_ns: bool,
+    /// Enable auto-deduplication
+    #[clap(long)]
+    pub auto_dedup: bool,
 }
