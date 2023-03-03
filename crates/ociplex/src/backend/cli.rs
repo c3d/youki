@@ -157,6 +157,58 @@ impl Backend for CliBackend {
 
         backargs.push("checkpoint".into());
 
+        if args.ext_unix_sk {
+            backargs.push("--ext-unix-sk".into())
+        }
+        if args.file_locks {
+            backargs.push("--file-locks".into())
+        }
+        if args.image_path.as_os_str() != "checkpoint" {
+            backargs.push("--image-path".into());
+            backargs.push(args.image_path.into_os_string())
+        }
+        if args.leave_running {
+            backargs.push("--leave-running".into())
+        }
+        if args.shell_job {
+            backargs.push("--shell-job".into())
+        }
+        if args.tcp_established {
+            backargs.push("--tcp-established".into())
+        }
+        if let Some(work_path) = args.work_path {
+            backargs.push("--work-path".into());
+            backargs.push(work_path.into_os_string())
+        }
+        if let Some(parent_path) = args.parent_path {
+            backargs.push("--parent-path".into());
+            backargs.push(parent_path.into_os_string())
+        }
+        if args.lazy_pages {
+            backargs.push("--lazy-pages".into())
+        }
+        if let Some(status_fd) = args.status_fd {
+            backargs.push("--status-fd".into());
+            backargs.push(status_fd.to_string().into())
+        }
+        if let Some(page_server) = args.page_server {
+            backargs.push("--page-server".into());
+            backargs.push(page_server.into())
+        }
+        if args.pre_dump {
+            backargs.push("--pre-dump".into())
+        }
+        if let Some(cgroups_mode) = args.manage_cgroups_mode {
+            backargs.push("--manage-cgroups-mode".into());
+            backargs.push(cgroups_mode.into())
+        }
+        if args.empty_ns {
+            backargs.push("--empty-ns".into())
+        }
+        if args.auto_dedup {
+            backargs.push("--auto-dedup".into())
+        }
+
         backargs.push(args.container_id.into());
 
         self.invoke(backargs)
