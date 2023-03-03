@@ -5,32 +5,27 @@ use std::path::PathBuf;
 /// Reference: https://github.com/opencontainers/runc/blob/main/man/runc-checkpoint.8.md
 #[derive(Parser, Debug)]
 pub struct Checkpoint {
-    #[clap(value_parser = clap::builder::NonEmptyStringValueParser::new(), required = true)]
-    pub container_id: String,
-    /// Allow external unix sockets
-    #[clap(long)]
-    pub ext_unix_sk: bool,
-    /// Allow file locks
-    #[clap(long)]
-    pub file_locks: bool,
     /// Path for saving criu image files
     #[clap(long, default_value = "checkpoint")]
     pub image_path: PathBuf,
-    /// Leave the process running after checkpointing
-    #[clap(long)]
-    pub leave_running: bool,
-    /// Allow shell jobs
-    #[clap(long)]
-    pub shell_job: bool,
-    /// Allow open tcp connections
-    #[clap(long)]
-    pub tcp_established: bool,
     /// Path for saving work files and logs
     #[clap(long)]
     pub work_path: Option<PathBuf>,
     /// Path for previous criu image file in pre-dump
     #[clap(long)]
     pub parent_path: Option<PathBuf>,
+    /// Leave the process running after checkpointing
+    #[clap(long)]
+    pub leave_running: bool,
+    /// Allow open tcp connections
+    #[clap(long)]
+    pub tcp_established: bool,
+    /// Allow external unix sockets
+    #[clap(long)]
+    pub ext_unix_sk: bool,
+    /// Allow shell jobs
+    #[clap(long)]
+    pub shell_job: bool,
     /// Use lazy migration mechanism
     #[clap(long)]
     pub lazy_pages: bool,
@@ -40,6 +35,9 @@ pub struct Checkpoint {
     /// Start a page server at the given URL
     #[clap(long)]
     pub page_server: Option<String>,
+    /// Allow file locks
+    #[clap(long)]
+    pub file_locks: bool,
     /// Do a pre-dump
     #[clap(long)]
     pub pre_dump: bool,
@@ -52,4 +50,7 @@ pub struct Checkpoint {
     /// Enable auto-deduplication
     #[clap(long)]
     pub auto_dedup: bool,
+
+    #[clap(value_parser = clap::builder::NonEmptyStringValueParser::new(), required = true)]
+    pub container_id: String,
 }
