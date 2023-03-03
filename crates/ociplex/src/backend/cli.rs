@@ -360,9 +360,7 @@ impl Backend for CliBackend {
         self.invoke(backargs)
     }
     fn pause(&self, args: liboci_cli::Pause) -> Result<()> {
-        let mut backargs = Vec::<OsString>::new();
-
-        backargs.push("pause".into());
+        let backargs: Vec<OsString> = vec!["pause".into(), args.container_id.into()];
 
         self.invoke(backargs)
     }
