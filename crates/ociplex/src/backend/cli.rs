@@ -174,24 +174,9 @@ impl Backend for CliBackend {
 
         backargs.push("checkpoint".into());
 
-        if args.ext_unix_sk {
-            backargs.push("--ext-unix-sk".into())
-        }
-        if args.file_locks {
-            backargs.push("--file-locks".into())
-        }
         if args.image_path.as_os_str() != "checkpoint" {
             backargs.push("--image-path".into());
             backargs.push(args.image_path.into_os_string())
-        }
-        if args.leave_running {
-            backargs.push("--leave-running".into())
-        }
-        if args.shell_job {
-            backargs.push("--shell-job".into())
-        }
-        if args.tcp_established {
-            backargs.push("--tcp-established".into())
         }
         if let Some(work_path) = args.work_path {
             backargs.push("--work-path".into());
@@ -200,6 +185,18 @@ impl Backend for CliBackend {
         if let Some(parent_path) = args.parent_path {
             backargs.push("--parent-path".into());
             backargs.push(parent_path.into_os_string())
+        }
+        if args.leave_running {
+            backargs.push("--leave-running".into())
+        }
+        if args.tcp_established {
+            backargs.push("--tcp-established".into())
+        }
+        if args.ext_unix_sk {
+            backargs.push("--ext-unix-sk".into())
+        }
+        if args.shell_job {
+            backargs.push("--shell-job".into())
         }
         if args.lazy_pages {
             backargs.push("--lazy-pages".into())
@@ -211,6 +208,9 @@ impl Backend for CliBackend {
         if let Some(page_server) = args.page_server {
             backargs.push("--page-server".into());
             backargs.push(page_server.into())
+        }
+        if args.file_locks {
+            backargs.push("--file-locks".into())
         }
         if args.pre_dump {
             backargs.push("--pre-dump".into())
