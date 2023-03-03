@@ -3,6 +3,7 @@ use clap::Parser;
 use std::path::PathBuf;
 
 /// Create a container
+/// Reference: https://github.com/opencontainers/runc/blob/main/man/runc-create.8.md
 #[derive(Parser, Debug)]
 pub struct Create {
     /// File to write pid of the container created
@@ -18,6 +19,9 @@ pub struct Create {
     /// Pass N additional file descriptors to the container (stdio + $LISTEN_FDS + N in total)
     #[clap(long, default_value = "0")]
     pub preserve_fds: i32,
+    /// Do not use pivot rool to jail process inside rootfs
+    #[clap(long)]
+    pub no_pivot: bool,
 
     // XXX: non-standard extension
     #[clap(long)]
