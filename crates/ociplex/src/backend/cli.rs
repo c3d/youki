@@ -258,23 +258,23 @@ impl Backend for CliBackend {
             backargs.push(consock.into());
         }
 
-        if args.tty {
-            backargs.push("--tty".into());
-        }
-
         if let Some(cwd) = args.cwd {
             backargs.push("--cwd".into());
             backargs.push(cwd.into());
         }
 
-        if let Some(pidfile) = args.pid_file {
-            backargs.push("--pid-file".into());
-            backargs.push(pidfile.into());
-        }
-
         for (key, val) in args.env {
             backargs.push("--env".into());
             backargs.push(format!("{}={}", key, val).into());
+        }
+
+        if args.tty {
+            backargs.push("--tty".into());
+        }
+
+        if let Some(pidfile) = args.pid_file {
+            backargs.push("--pid-file".into());
+            backargs.push(pidfile.into());
         }
 
         if args.no_new_privs {
