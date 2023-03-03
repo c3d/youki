@@ -369,6 +369,17 @@ impl Backend for CliBackend {
 
         backargs.push("ps".into());
 
+        if args.format != "table" {
+            backargs.push("--format".into());
+            backargs.push(args.format.into())
+        }
+
+        backargs.push(args.container_id.into());
+
+        for opt in args.ps_options {
+            backargs.push(opt.into())
+        }
+
         self.invoke(backargs)
     }
     fn resume(&self, args: liboci_cli::Resume) -> Result<()> {
