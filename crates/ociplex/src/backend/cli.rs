@@ -91,16 +91,24 @@ impl Backend for CliBackend {
             backargs.push(pidfile.into_os_string());
         }
 
-        backargs.push("--bundle".into());
-        backargs.push(args.bundle.into_os_string());
+        if args.bundle.as_os_str() != "." {
+            backargs.push("--bundle".into());
+            backargs.push(args.bundle.into_os_string());
+        }
 
         if let Some(consock) = args.console_socket {
             backargs.push("--console-socket".into());
             backargs.push(consock.into_os_string());
         }
 
-        backargs.push("--preserve-fds".into());
-        backargs.push(format!("{}", args.preserve_fds).into());
+        if args.preserve_fds > 0 {
+            backargs.push("--preserve-fds".into());
+            backargs.push(format!("{}", args.preserve_fds).into());
+        }
+
+        if args.no_pivot {
+            backargs.push("--no-pivot".into())
+        }
 
         if args.no_new_keyring {
             backargs.push("--no-new-keyring".into());
