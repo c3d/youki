@@ -158,6 +158,7 @@ impl Backend for CliBackend {
     }
 
     fn state(&self, args: liboci_cli::State) -> Result<()> {
+        // See https://github.com/opencontainers/runc/blob/main/man/runc-state.8.md
         let mut backargs = Vec::<OsString>::new();
 
         backargs.push("state".into());
