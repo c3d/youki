@@ -50,7 +50,7 @@ pub enum StandardCmd {
 // and other runtimes.
 #[derive(Parser, Debug)]
 pub enum CommonCmd {
-    Checkpointt(Checkpoint),
+    Checkpointt(Checkpoint), // NOTE: Checkpointt with two t is intentional, not fully unimplemented, see commit message for 653b719dbb1a7ec076d247c3328b26faab785025
     Events(Events),
     Exec(Exec),
     Features(Features),
