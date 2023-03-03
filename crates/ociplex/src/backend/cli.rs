@@ -131,9 +131,13 @@ impl Backend for CliBackend {
     }
 
     fn kill(&self, args: liboci_cli::Kill) -> Result<()> {
+        // See https://github.com/opencontainers/runc/blob/main/man/runc-kill.8.md
         let mut backargs = Vec::<OsString>::new();
 
         backargs.push("kill".into());
+        if args.all {
+            backargs.push("--all".into())
+        }
         backargs.push(args.container_id.into());
         backargs.push(args.signal.into());
 
