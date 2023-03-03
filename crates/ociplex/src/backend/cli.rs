@@ -391,6 +391,48 @@ impl Backend for CliBackend {
 
         backargs.push("run".into());
 
+        if args.bundle.as_os_str() != "." {
+            backargs.push("--bundle".into());
+            backargs.push(args.bundle.into_os_string())
+        }
+
+        if let Some(path) = args.console_socket {
+            backargs.push("--console-socket".into());
+            backargs.push(path.into_os_string())
+        }
+
+        if args.detach {
+            backargs.push("--detach".into())
+        }
+
+        if let Some(pidfile) = args.pid_file {
+            backargs.push("--pid-file".into());
+            backargs.push(pidfile.into_os_string())
+        }
+
+        if args.no_subreaper {
+            backargs.push("--no-subreaper".into())
+        }
+
+        if args.no_pivot {
+            backargs.push("--no-pivot".into())
+        }
+
+        if args.no_new_keyring {
+            backargs.push("--no-new-keyring".into())
+        }
+
+        if args.preserve_fds > 0 {
+            backargs.push("--preserve-fds".into());
+            backargs.push(args.preserve_fds.to_string().into())
+        }
+
+        if args.keep {
+            backargs.push("--keep".into())
+        }
+
+        backargs.push(args.container_id.into());
+
         self.invoke(backargs)
     }
     fn update(&self, args: liboci_cli::Update) -> Result<()> {
