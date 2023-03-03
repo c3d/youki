@@ -104,7 +104,7 @@ impl Backend for CliBackend {
 
         if args.preserve_fds > 0 {
             backargs.push("--preserve-fds".into());
-            backargs.push(format!("{}", args.preserve_fds).into());
+            backargs.push(args.preserve_fds.to_string().into())
         }
 
         if args.no_pivot {
@@ -250,9 +250,11 @@ impl Backend for CliBackend {
     }
 
     fn exec(&self, args: liboci_cli::Exec) -> Result<()> {
+        // See https://github.com/opencontainers/runc/blob/main/man/runc-exec.8.md
         let mut backargs = Vec::<OsString>::new();
 
         backargs.push("exec".into());
+
         if let Some(consock) = args.console_socket {
             backargs.push("--console-socket".into());
             backargs.push(consock.into());
@@ -272,13 +274,18 @@ impl Backend for CliBackend {
             backargs.push("--tty".into());
         }
 
-        if let Some(pidfile) = args.pid_file {
-            backargs.push("--pid-file".into());
-            backargs.push(pidfile.into());
+        if let Some((uid, ogid)) = args.user {
+            backargs.push("--user".into());
+            if let Some(gid) = ogid {
+                backargs.push(format!("{}:{}", uid, gid).into())
+            } else {
+                backargs.push(uid.to_string().into())
+            }
         }
 
-        if args.no_new_privs {
-            backargs.push("--no-new-privs".into());
+        for gid in args.additional_gids {
+            backargs.push("--additional-gids".into());
+            backargs.push(gid.to_string().into())
         }
 
         if let Some(process) = args.process {
@@ -288,6 +295,44 @@ impl Backend for CliBackend {
 
         if args.detach {
             backargs.push("--detach".into());
+        }
+
+        if let Some(pidfile) = args.pid_file {
+            backargs.push("--pid-file".into());
+            backargs.push(pidfile.into_os_string());
+        }
+
+        if let Some(label) = args.process_label {
+            backargs.push("--process-label".into());
+            backargs.push(label.into())
+        }
+
+        if let Some(profile) = args.apparmor {
+            backargs.push("--apparmor".into());
+            backargs.push(profile.into())
+        }
+
+        if args.no_new_privs {
+            backargs.push("--no-new-privs".into());
+        }
+
+        for cap in args.cap {
+            backargs.push("--cap".into());
+            backargs.push(cap.into())
+        }
+
+        if args.preserve_fds > 0 {
+            backargs.push("--preserve-fds".into());
+            backargs.push(args.preserve_fds.to_string().into())
+        }
+
+        if args.ignore_paused {
+            backargs.push("--ignore-paused".into())
+        }
+
+        if let Some(cgroup) = args.cgroup {
+            backargs.push("--cgroup".into());
+            backargs.push(cgroup.into())
         }
 
         backargs.push(args.container_id.into());
