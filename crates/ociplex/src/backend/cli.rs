@@ -80,6 +80,7 @@ impl CliBackend {
 }
 
 impl Backend for CliBackend {
+    // Standard commands (from liboci_cli::StandardCmd)
     fn create(&self, args: liboci_cli::Create) -> Result<()> {
         let mut backargs = Vec::<OsString>::new();
 
@@ -150,6 +151,24 @@ impl Backend for CliBackend {
         self.invoke(backargs)
     }
 
+    // Common non-standard commands (from liboci_cli::CommonCmd)
+    fn checkpoint(&self, args: liboci_cli::Checkpoint) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("checkpoint".into());
+
+        backargs.push(args.container_id.into());
+
+        self.invoke(backargs)
+    }
+    fn events(&self, args: liboci_cli::Events) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("events".into());
+
+        self.invoke(backargs)
+    }
+
     fn exec(&self, args: liboci_cli::Exec) -> Result<()> {
         let mut backargs = Vec::<OsString>::new();
 
@@ -195,6 +214,56 @@ impl Backend for CliBackend {
         for a in args.command {
             backargs.push(a.into());
         }
+
+        self.invoke(backargs)
+    }
+
+    fn list(&self, args: liboci_cli::List) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("list".into());
+
+        self.invoke(backargs)
+    }
+    fn pause(&self, args: liboci_cli::Pause) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("pause".into());
+
+        self.invoke(backargs)
+    }
+    fn ps(&self, args: liboci_cli::Ps) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("ps".into());
+
+        self.invoke(backargs)
+    }
+    fn resume(&self, args: liboci_cli::Resume) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("resume".into());
+
+        self.invoke(backargs)
+    }
+    fn run(&self, args: liboci_cli::Run) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("run".into());
+
+        self.invoke(backargs)
+    }
+    fn update(&self, args: liboci_cli::Update) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("update".into());
+
+        self.invoke(backargs)
+    }
+    fn spec(&self, args: liboci_cli::Spec) -> Result<()> {
+        let mut backargs = Vec::<OsString>::new();
+
+        backargs.push("spec".into());
 
         self.invoke(backargs)
     }
