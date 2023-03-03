@@ -82,6 +82,7 @@ impl CliBackend {
 impl Backend for CliBackend {
     // Standard commands (from liboci_cli::StandardCmd)
     fn create(&self, args: liboci_cli::Create) -> Result<()> {
+        // See https://github.com/opencontainers/runc/blob/main/man/runc-create.8.md
         let mut backargs = Vec::<OsString>::new();
 
         backargs.push("create".into());
@@ -120,6 +121,7 @@ impl Backend for CliBackend {
     }
 
     fn start(&self, args: liboci_cli::Start) -> Result<()> {
+        // See https://github.com/opencontainers/runc/blob/main/man/runc-start.8.md
         let mut backargs = Vec::<OsString>::new();
 
         backargs.push("start".into());
