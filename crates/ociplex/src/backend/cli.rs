@@ -383,10 +383,7 @@ impl Backend for CliBackend {
         self.invoke(backargs)
     }
     fn resume(&self, args: liboci_cli::Resume) -> Result<()> {
-        let mut backargs = Vec::<OsString>::new();
-
-        backargs.push("resume".into());
-
+        let backargs: Vec<OsString> = vec!["resume".into(), args.container_id.into()];
         self.invoke(backargs)
     }
     fn run(&self, args: liboci_cli::Run) -> Result<()> {
