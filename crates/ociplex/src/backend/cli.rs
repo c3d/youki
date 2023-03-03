@@ -363,6 +363,7 @@ impl Backend for CliBackend {
         let mut backargs = Vec::<OsString>::new();
 
         backargs.push("pause".into());
+        backargs.push(args.container_id.into());
 
         self.invoke(backargs)
     }
