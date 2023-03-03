@@ -348,6 +348,15 @@ impl Backend for CliBackend {
 
         backargs.push("list".into());
 
+        if args.format != "table" {
+            backargs.push("--format".into());
+            backargs.push(args.format.into())
+        }
+
+        if args.quiet {
+            backargs.push("-q".into())
+        }
+
         self.invoke(backargs)
     }
     fn pause(&self, args: liboci_cli::Pause) -> Result<()> {
