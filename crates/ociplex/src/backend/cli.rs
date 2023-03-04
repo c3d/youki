@@ -440,6 +440,83 @@ impl Backend for CliBackend {
 
         backargs.push("update".into());
 
+        if let Some(resources) = args.resources {
+            backargs.push("--resources".into());
+            backargs.push(resources.into_os_string())
+        }
+
+        if let Some(weight) = args.blkio_weight {
+            backargs.push("--blkio-weight".into());
+            backargs.push(weight.to_string().into())
+        }
+
+        if let Some(period) = args.cpu_period {
+            backargs.push("--cpu-period".into());
+            backargs.push(period.to_string().into())
+        }
+
+        if let Some(quota) = args.cpu_quota {
+            backargs.push("--cpu-quota".into());
+            backargs.push(quota.to_string().into())
+        }
+
+        if let Some(period) = args.cpu_rt_period {
+            backargs.push("--cpu-rt-period".into());
+            backargs.push(period.to_string().into())
+        }
+
+        if let Some(runtime) = args.cpu_rt_runtime {
+            backargs.push("--cpu-rt-runtime".into());
+            backargs.push(runtime.to_string().into())
+        }
+
+        if let Some(share) = args.cpu_share {
+            backargs.push("--cpu-share".into());
+            backargs.push(share.to_string().into())
+        }
+
+        if let Some(cpus) = args.cpuset_cpus {
+            backargs.push("--cpuset-cpus".into());
+            backargs.push(cpus.into())
+        }
+
+        if let Some(mems) = args.cpuset_mems {
+            backargs.push("--cpuset-mems".into());
+            backargs.push(mems.into())
+        }
+
+        if let Some(mem) = args.memory {
+            backargs.push("--memory".into());
+            backargs.push(mem.to_string().into())
+        }
+
+        if let Some(mem) = args.memory_reservation {
+            backargs.push("--memory-reservation".into());
+            backargs.push(mem.to_string().into())
+        }
+
+        if let Some(mem) = args.memory_swap {
+            backargs.push("--memory-swap".into());
+            backargs.push(mem.to_string().into())
+        }
+
+        if let Some(limit) = args.pids_limit {
+            backargs.push("--pids-limit".into());
+            backargs.push(limit.to_string().into())
+        }
+
+        if let Some(schema) = args.l3_cache_schema {
+            backargs.push("--l3-cache-schema".into());
+            backargs.push(schema.into())
+        }
+
+        if let Some(schema) = args.mem_bw_schema {
+            backargs.push("--mem-bw-schema".into());
+            backargs.push(schema.into())
+        }
+
+        backargs.push(args.container_id.into());
+
         self.invoke(backargs)
     }
     fn spec(&self, args: liboci_cli::Spec) -> Result<()> {
