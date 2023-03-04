@@ -524,6 +524,15 @@ impl Backend for CliBackend {
 
         backargs.push("spec".into());
 
+        if let Some(path) = args.bundle {
+            backargs.push("--bundle".into());
+            backargs.push(path.into_os_string())
+        }
+
+        if args.rootless {
+            backargs.push("--rootless".into())
+        }
+
         self.invoke(backargs)
     }
 }
