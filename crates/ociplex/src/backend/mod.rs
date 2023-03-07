@@ -39,6 +39,7 @@ pub trait Backend: Debug {
             CommonCmd::Checkpointt(args) => self.checkpoint(args),
             CommonCmd::Events(args) => self.events(args),
             CommonCmd::Exec(args) => self.exec(args),
+            CommonCmd::Features(args) => self.features(args),
             CommonCmd::List(args) => self.list(args),
             CommonCmd::Pause(args) => self.pause(args),
             CommonCmd::Ps(args) => self.ps(args),
@@ -65,6 +66,9 @@ pub trait Backend: Debug {
     }
     fn exec(&self, args: liboci_cli::Exec) -> Result<()> {
         Err(anyhow!("exec subcommand unimplemented: {:?}", args))
+    }
+    fn features(&self, args: liboci_cli::Features) -> Result<()> {
+        Err(anyhow!("features subcommand unimplemented: {:?}", args))
     }
     fn list(&self, args: liboci_cli::List) -> Result<()> {
         Err(anyhow!("list subcommand unimplemented: {:?}", args))

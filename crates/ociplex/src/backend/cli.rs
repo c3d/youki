@@ -343,6 +343,11 @@ impl Backend for CliBackend {
         self.invoke(backargs)
     }
 
+    fn features(&self, _args: liboci_cli::Features) -> Result<()> {
+        let backargs: Vec<OsString> = vec!["features".into()];
+        self.invoke(backargs)
+    }
+
     fn list(&self, args: liboci_cli::List) -> Result<()> {
         let mut backargs = Vec::<OsString>::new();
 
@@ -359,11 +364,13 @@ impl Backend for CliBackend {
 
         self.invoke(backargs)
     }
+
     fn pause(&self, args: liboci_cli::Pause) -> Result<()> {
         let backargs: Vec<OsString> = vec!["pause".into(), args.container_id.into()];
 
         self.invoke(backargs)
     }
+
     fn ps(&self, args: liboci_cli::Ps) -> Result<()> {
         let mut backargs = Vec::<OsString>::new();
 

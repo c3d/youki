@@ -49,6 +49,9 @@ impl Backend for TrivialBackend {
     fn exec(&self, args: liboci_cli::Exec) -> Result<()> {
         Err(anyhow!("trivial: {:?}", args))
     }
+    fn features(&self, args: liboci_cli::Features) -> Result<()> {
+        Err(anyhow!("trivial: {:?}", args))
+    }
     fn list(&self, args: liboci_cli::List) -> Result<()> {
         Err(anyhow!("trivial: {:?}", args))
     }
