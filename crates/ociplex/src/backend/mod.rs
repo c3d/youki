@@ -5,6 +5,7 @@ use anyhow::{anyhow, Result};
 use liboci_cli::{CommonCmd, GlobalOpts, StandardCmd};
 
 mod cli;
+mod shimv2;
 mod trivial;
 
 #[derive(Debug, serde::Deserialize)]
