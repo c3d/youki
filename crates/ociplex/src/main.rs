@@ -4,7 +4,7 @@ use std::path::PathBuf;
 use anyhow::{Context, Result};
 use clap::{crate_version, Parser};
 
-use liboci_cli::{GlobalOpts, StandardCmd};
+use liboci_cli::{CommonCmd, GlobalOpts, StandardCmd};
 
 mod backend;
 
@@ -13,7 +13,8 @@ enum Subcommand {
     #[clap(flatten)]
     Standard(StandardCmd),
 
-    Exec(liboci_cli::Exec),
+    #[clap(flatten)]
+    CommonCmd(CommonCmd),
 }
 
 #[derive(Parser, Debug)]
@@ -41,7 +42,7 @@ fn main() -> Result<()> {
     let backend = config.instantiate(opts.global);
     match opts.subcmd {
         Subcommand::Standard(std) => backend.standard_command(std)?,
-        Subcommand::Exec(exec) => backend.exec(exec)?,
+        Subcommand::CommonCmd(common) => backend.common_command(common)?,
     }
 
     Ok(())
