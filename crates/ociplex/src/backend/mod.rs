@@ -13,6 +13,7 @@ mod trivial;
 pub enum Config {
     Trivial(trivial::Config),
     Cli(cli::Config),
+    ShimV2(shimv2::Config),
 }
 
 impl Config {
@@ -20,6 +21,7 @@ impl Config {
         match self {
             Config::Trivial(c) => c.instantiate(global),
             Config::Cli(c) => c.instantiate(global),
+            Config::ShimV2(c) => c.instantiate(global),
         }
     }
 }
