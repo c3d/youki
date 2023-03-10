@@ -1,0 +1,6 @@
+#! @BASEPATH@/ociplex --backend
+
+backend-type = "ShimV2"
+path = "/usr/local/bin/containerd-shim-koto-v2"
+socket = "/run/containerd/containerd.sock"
+events = "/usr/bin/containerd"
