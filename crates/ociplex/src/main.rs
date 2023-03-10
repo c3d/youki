@@ -20,7 +20,7 @@ enum Subcommand {
 #[derive(Parser, Debug)]
 #[clap(version = crate_version!())]
 struct Opts {
-    #[clap(long)]
+    #[clap(long, default_value = "/etc/ociplex.toml")]
     backend: PathBuf,
 
     #[clap(flatten)]
