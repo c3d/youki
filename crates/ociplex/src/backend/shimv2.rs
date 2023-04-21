@@ -189,6 +189,17 @@ impl Backend for ShimV2Backend {
     }
 
     fn state(&self, args: liboci_cli::State) -> Result<()> {
+        let (task, context, connect_response) = self.invoke(&args.container_id)?;
+        let req = api::StateRequest {
+            id: args.container_id,
+            ..Default::default()
+        };
+        let resp = task.state(context, &req)?;
+        if self.global_opts.debug {
+            println!("State connect response {:?}", connect_response);
+            println!("State response {:?}", resp);
+        }
+
         Ok(())
     }
 
