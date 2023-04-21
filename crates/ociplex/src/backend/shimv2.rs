@@ -135,8 +135,10 @@ impl Backend for ShimV2Backend {
             ..Default::default()
         };
         let resp = task.create(context, &req)?;
-        println!("Connect response {:?}", connect_response);
-        println!("Create response {:?}", resp);
+        if self.global_opts.debug {
+            println!("Connect response {:?}", connect_response);
+            println!("Create response {:?}", resp);
+        }
         Ok(())
     }
 
