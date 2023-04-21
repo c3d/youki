@@ -41,6 +41,16 @@ struct ShimV2Backend {
     global_opts: GlobalOpts,
 }
 
+fn path_buf_to_string<'a>(kind: &str, path: &'a PathBuf) -> Result<&'a str> {
+    path.to_str().ok_or_else(|| {
+        anyhow!(
+            "ShimV2 {} path {} contains invalid characters",
+            kind,
+            path.display(),
+        )
+    })
+}
+
 impl ShimV2Backend {
     fn new(shim: PathBuf, socket: PathBuf, events: PathBuf, global_opts: GlobalOpts) -> Self {
         ShimV2Backend {
@@ -78,19 +88,13 @@ impl ShimV2Backend {
         })
     }
 
-    fn invoke(&self, pid: String) -> Result<(TaskClient, Context, ConnectResponse)> {
-        let socket_path = self.socket.to_str().ok_or_else(|| {
-            anyhow!(
-                "ShimV2 socket path {} contains invalid characters",
-                self.socket.display()
-            )
-        })?;
-
+    fn invoke(&self, pid: &str) -> Result<(TaskClient, Context, ConnectResponse)> {
+        let socket_path = path_buf_to_string("socket", &self.socket)?;
         let client = client::Client::connect(socket_path).or_else(|_| self.launch(socket_path))?;
         let task_client = client::TaskClient::new(client);
         let context = Context::default();
         let req = api::ConnectRequest {
-            id: pid,
+            id: pid.to_string(),
             ..Default::default()
         };
         let resp = task_client.connect(context.clone(), &req)?;
