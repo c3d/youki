@@ -1,7 +1,8 @@
 use containerd_shim_protos as shim;
 
-use shim::api;
+use containerd_shim_protos as client;
 use shim::ttrpc::context::Context;
+use shim::{api, api::ConnectResponse, Client, TaskClient};
 
 use std::ffi::OsString;
 use std::os::unix::process::ExitStatusExt;
@@ -16,40 +17,58 @@ use super::Backend;
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Config {
-    binary_path: PathBuf,
+    shim: PathBuf,
     socket: PathBuf,
+    events: PathBuf,
 }
 
 impl Config {
     pub fn instantiate(self, opts: GlobalOpts) -> Box<dyn Backend> {
-        Box::new(ShimV2Backend::new(self.binary_path, self.socket, opts))
+        Box::new(ShimV2Backend::new(
+            self.shim,
+            self.socket,
+            self.events,
+            opts,
+        ))
     }
 }
 
 #[derive(Debug)]
 struct ShimV2Backend {
-    path: PathBuf,
+    shim: PathBuf,
     socket: PathBuf,
+    events: PathBuf,
     global_opts: GlobalOpts,
 }
 
 impl ShimV2Backend {
-    fn new(path: PathBuf, socket: PathBuf, global_opts: GlobalOpts) -> Self {
+    fn new(shim: PathBuf, socket: PathBuf, events: PathBuf, global_opts: GlobalOpts) -> Self {
         ShimV2Backend {
-            path,
+            shim,
             socket,
+            events,
             global_opts,
         }
     }
 
-    fn launch(&self, args: impl IntoIterator<Item = OsString>) -> Result<()> {
-        let status = Command::new(&self.path).args(args).status()?;
+    fn launch(&self, socket_path: &str) -> Result<Client> {
+        let mut cmdargs = Vec::<OsString>::new();
+
+        cmdargs.push("start".into());
+        cmdargs.push("-namespace".into());
+        cmdargs.push("default".into());
+        cmdargs.push("-address".into());
+        cmdargs.push(self.socket.clone().into());
+        cmdargs.push("-publish-binary".into());
+        cmdargs.push(self.events.clone().into());
+
+        let status = Command::new(&self.shim).args(cmdargs).status()?;
 
         if status.success() {
-            return Ok(());
+            return client::Client::connect(socket_path).map_err(anyhow::Error::from);
         }
 
-        let path = &self.path;
+        let path = &self.shim;
         Err(if let Some(sig) = status.signal() {
             anyhow!("ShimV2 backend {:?} terminated with signal {:?}", path, sig)
         } else if let Some(code) = status.code() {
@@ -57,6 +76,25 @@ impl ShimV2Backend {
         } else {
             anyhow!("Unidentified failure in ShimV2 backend")
         })
+    }
+
+    fn invoke(&self, pid: String) -> Result<(TaskClient, Context, ConnectResponse)> {
+        let socket_path = self.socket.to_str().ok_or_else(|| {
+            anyhow!(
+                "ShimV2 socket path {} contains invalid characters",
+                self.socket.display()
+            )
+        })?;
+
+        let client = client::Client::connect(socket_path).or_else(|_| self.launch(socket_path))?;
+        let task_client = client::TaskClient::new(client);
+        let context = Context::default();
+        let req = api::ConnectRequest {
+            id: pid,
+            ..Default::default()
+        };
+        let resp = task_client.connect(context.clone(), &req)?;
+        Ok((task_client, context, resp))
     }
 }
 
