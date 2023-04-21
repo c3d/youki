@@ -106,10 +106,8 @@ impl Backend for ShimV2Backend {
     // Standard commands (from liboci_cli::StandardCmd)
     fn create(&self, args: liboci_cli::Create) -> Result<()> {
         let (task, context, connect_response) = self.invoke(&args.container_id)?;
-        let mut req = api::CreateTaskRequest::new();
-        req.set_id(args.container_id);
         let bundle = path_buf_to_string("bundle", &args.bundle)?;
-        req.set_bundle(bundle.to_owned());
+
         if let Some(socket) = args.console_socket {
             println!(
                 "Console socket {} option not implemented, ignored",
@@ -131,6 +129,11 @@ impl Backend for ShimV2Backend {
         if args.preserve_fds > 0 {
             eprintln!("preserve-fds option not implemented, ignored");
         }
+        let req = api::CreateTaskRequest {
+            id: args.container_id,
+            bundle: bundle.to_owned(),
+            ..Default::default()
+        };
         let resp = task.create(context, &req)?;
         println!("Connect response {:?}", connect_response);
         println!("Create response {:?}", resp);
