@@ -143,6 +143,17 @@ impl Backend for ShimV2Backend {
     }
 
     fn start(&self, args: liboci_cli::Start) -> Result<()> {
+        let (task, context, connect_response) = self.invoke(&args.container_id)?;
+        let req = api::StartRequest {
+            id: args.container_id,
+            ..Default::default()
+        };
+        let resp = task.start(context, &req)?;
+        if self.global_opts.debug {
+            println!("Connect response {:?}", connect_response);
+            println!("Start response {:?}", resp);
+        }
+
         Ok(())
     }
 
