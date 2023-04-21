@@ -136,7 +136,7 @@ impl Backend for ShimV2Backend {
         };
         let resp = task.create(context, &req)?;
         if self.global_opts.debug {
-            println!("Connect response {:?}", connect_response);
+            println!("Create connect response {:?}", connect_response);
             println!("Create response {:?}", resp);
         }
         Ok(())
@@ -150,7 +150,7 @@ impl Backend for ShimV2Backend {
         };
         let resp = task.start(context, &req)?;
         if self.global_opts.debug {
-            println!("Connect response {:?}", connect_response);
+            println!("Start connect response {:?}", connect_response);
             println!("Start response {:?}", resp);
         }
 
@@ -158,6 +158,18 @@ impl Backend for ShimV2Backend {
     }
 
     fn kill(&self, args: liboci_cli::Kill) -> Result<()> {
+        let (task, context, connect_response) = self.invoke(&args.container_id)?;
+        let signal = args.signal.parse::<u32>()?;
+        let req = api::KillRequest {
+            id: args.container_id,
+            signal: signal,
+            all: args.all,
+            ..Default::default()
+        };
+        let resp = task.kill(context, &req)?;
+        if self.global_opts.debug {
+            println!("Kill connect response {:?}", connect_response);
+        }
         Ok(())
     }
 
