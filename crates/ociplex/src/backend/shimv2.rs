@@ -105,6 +105,14 @@ impl ShimV2Backend {
 impl Backend for ShimV2Backend {
     // Standard commands (from liboci_cli::StandardCmd)
     fn create(&self, args: liboci_cli::Create) -> Result<()> {
+        let (task, context, response) = self.invoke(&args.container_id)?;
+        let mut req = api::CreateTaskRequest::new();
+        req.set_id(args.container_id);
+        let bundle = path_buf_to_string("bundle", &args.bundle)?;
+        req.set_bundle(bundle.to_owned());
+        if let Some(socket) = args.console_socket {}
+        let resp = task.create(context, &req)?;
+        println!("Create response {:?}", resp);
         Ok(())
     }
 
