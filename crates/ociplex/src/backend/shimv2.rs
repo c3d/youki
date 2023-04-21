@@ -205,6 +205,23 @@ impl Backend for ShimV2Backend {
 
     // Common non-standard commands (from liboci_cli::CommonCmd)
     fn checkpoint(&self, args: liboci_cli::Checkpoint) -> Result<()> {
+        let (task, context, connect_response) = self.invoke(&args.container_id)?;
+        let image_path = path_buf_to_string("image_path", &args.image_path)?;
+        let req = api::CheckpointTaskRequest {
+            id: args.container_id,
+            path: image_path.to_owned(),
+            ..Default::default()
+        };
+
+        // REVISIT: There are plenty of ignored options for "checkpoint"
+        // They should probably be parsed and put in 'options'
+
+        let resp = task.checkpoint(context, &req)?;
+        if self.global_opts.debug {
+            println!("Checkpoint connect response {:?}", connect_response);
+            println!("Checkpoint response {:?}", resp);
+        }
+
         Ok(())
     }
 
