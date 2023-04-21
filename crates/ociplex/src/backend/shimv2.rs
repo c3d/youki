@@ -6,7 +6,7 @@ use shim::{api, api::ConnectResponse, Client, TaskClient};
 
 use std::ffi::OsString;
 use std::os::unix::process::ExitStatusExt;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use anyhow::{anyhow, Result};
@@ -41,7 +41,7 @@ struct ShimV2Backend {
     global_opts: GlobalOpts,
 }
 
-fn path_buf_to_string<'a>(kind: &str, path: &'a PathBuf) -> Result<&'a str> {
+fn path_buf_to_string<'a>(kind: &str, path: &'a Path) -> Result<&'a str> {
     path.to_str().ok_or_else(|| {
         anyhow!(
             "ShimV2 {} path {} contains invalid characters",
