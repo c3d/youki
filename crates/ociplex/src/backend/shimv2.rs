@@ -174,6 +174,17 @@ impl Backend for ShimV2Backend {
     }
 
     fn delete(&self, args: liboci_cli::Delete) -> Result<()> {
+        let (task, context, connect_response) = self.invoke(&args.container_id)?;
+        let req = api::DeleteRequest {
+            id: args.container_id,
+            ..Default::default()
+        };
+        let resp = task.delete(context, &req)?;
+        if self.global_opts.debug {
+            println!("Delete connect response {:?}", connect_response);
+            println!("Delete response {:?}", resp);
+        }
+
         Ok(())
     }
 
