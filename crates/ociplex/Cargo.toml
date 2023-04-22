@@ -15,4 +15,5 @@ liboci-cli = { path = "../liboci-cli" }
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.5"
 anyhow = "1.0"
-containerd-shim-protos = "0.2.0"
+containerd-shim-protos = "0.3.0"
+protobuf = "3.1"
